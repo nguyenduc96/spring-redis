@@ -77,7 +77,7 @@ public class RSAUtils {
         return "";
     }
 
-    private String getPrivateKeyString() {
+    public String getPrivateKeyString() {
         String privateKey = readFile("private_key.pem");
         if (StringUtils.isBlank(privateKey)) return privateKey;
         else return privateKey.replace("-----BEGIN PRIVATE KEY-----", "")
@@ -85,7 +85,7 @@ public class RSAUtils {
                 .replace("\r", "").replace("\n","");
     }
 
-    private String getPublicKeyString() {
+    public String getPublicKeyString() {
         String privateKey = readFile("public_key.pem");
         if (StringUtils.isBlank(privateKey)) return privateKey;
         else return privateKey.replace("-----BEGIN PUBLIC KEY-----", "")
@@ -93,14 +93,20 @@ public class RSAUtils {
                 .replace("\r", "").replace("\n","");
     }
 
-    private Key getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Key getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+        return keyFactory.generatePublic(keySpec);
+    }
+    public Key getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         byte[] publicKeyBytes = Base64.getDecoder().decode(getPublicKeyString());
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
         return keyFactory.generatePublic(keySpec);
     }
 
-    private Key getPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Key getPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         byte[] privateKeyBytes = Base64.getDecoder().decode(getPrivateKeyString());
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);

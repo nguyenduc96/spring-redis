@@ -1,15 +1,13 @@
 package com.example.springredis.core;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class RSAResponse {
-    private String data;
+@NoArgsConstructor
+@Data
+public class BaseRequest {
+    private String payload;
     private String encryptKey;
 }
